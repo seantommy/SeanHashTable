@@ -31,8 +31,8 @@ namespace SeanHashTable
             string name = "human ";
             for(int x = 0; x < 5000; x++)
             {
-                table.Add(name);
                 name = "human " + x.ToString();
+                table.Add(name);
             }
 
             nameFound = table.Search("pants");

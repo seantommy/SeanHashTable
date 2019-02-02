@@ -220,11 +220,11 @@ namespace SeanHashTable
             return index;
         }
 
-        private void PlaceInTable(string value, int index, string[] table)
+        private void PlaceInTable(string value, int index, string[] tableToEdit)
         {
-            if (table[index] == null)
+            if (tableToEdit[index] == null)
             {
-                table[index] = value;
+                tableToEdit[index] = value;
             }
             else
             {
@@ -234,16 +234,16 @@ namespace SeanHashTable
                 {
                     if (cycles < 20)
                     {
-                        index = (index + index - 1) % (table.Length - 1);      
+                        index = (index + index - 1) % (tableToEdit.Length - 1);      
                     }
                     else
                     {
-                        index = (index + 1) % (table.Length - 1);
+                        index = (index + 1) % (tableToEdit.Length - 1);
                     }
 
-                    if (table[index] == null)
+                    if (tableToEdit[index] == null)
                     {
-                        table[index] = value;
+                        tableToEdit[index] = value;
                         placed = true;
                     }
                     cycles++;
