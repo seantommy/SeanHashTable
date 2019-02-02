@@ -75,7 +75,7 @@ namespace SeanHashTable
             char[] representation = value.ToCharArray();
             foreach (char character in representation)
             {
-                index += GetCharHashValue(character);
+                index += GetCharHashValue(char.ToLower(character));
             }
 
             if (index == 0)
