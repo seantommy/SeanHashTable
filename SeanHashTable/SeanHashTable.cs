@@ -21,52 +21,89 @@ namespace SeanHashTable
         /// <param name="newValue">The string to be added to the table.</param>
         public void Add(string newValue)
         {
-            int index;
-            
-            if (resizing || Count >= table.Length * .75) //If we're resizing, we move three values over from the original table to the new table.
+            if (resizing || Count >= table.Length * .75)
             {
-                if (!resizing)
+                WorkOnResize();
+            }
+
+            PlaceInTable(newValue);
+            Count++;
+        }
+
+        private void WorkOnResize()
+        {
+            bool finished = false;
+            int cycles = 1;
+
+            if (!resizing)
+            {
+                resizing = true;
+                resizingTable = new string[table.Length * 2];
+            }
+
+            while (!finished && cycles < 4)
+            {
+                if (table[resizeIndex] != null)
                 {
-                    resizing = true;
-                    resizingTable = new string[table.Length * 2];
+                    PlaceInTable(table[resizeIndex]);
+                }
+                resizeIndex++;
+                if (resizeIndex >= table.Length)
+                {
+                    resizing = false;
+                    resizeIndex = 0;
+                    table = resizingTable;
+                    resizingTable = new string[0];
+                    resizingTable = null;
+                    finished = true;
                 }
 
-                bool stop = false;
-                int x = 0;
-                while (!stop)
-                {
-                    if (table[resizeIndex] != null)
-                    {
-                        index = GetHashIndex(table[resizeIndex]);
-                        PlaceInTable(table[resizeIndex], index, resizingTable);
-                    }
-                    resizeIndex++;
-                    if (resizeIndex >= table.Length)
-                    {
-                        resizing = false;
-                        resizeIndex = 0;
-                        table = null;
-                        table = resizingTable;
-                        stop = true;
-                    }
+                cycles++;
+            }
+        }
 
-                    x++;
-                    if(x > 2)
-                    {
-                        stop = true;
-                    }
-                }
+        private void PlaceInTable(string value)
+        {
+            int index = GetHashIndex(value);
+            string[] tableToEdit;
 
-                index = GetHashIndex(newValue);
-                PlaceInTable(newValue, index, resizingTable);
+            if (resizing)
+            {
+                tableToEdit = resizingTable;
             }
             else
             {
-                index = GetHashIndex(newValue);
-                PlaceInTable(newValue, index, table);
+                tableToEdit = table;
             }
 
-            Count++;
+            if (tableToEdit[index] == null)
+            {
+                tableToEdit[index] = value;
+            }
+            else
+            {
+                index = FindEmptyIndex(index);
+                bool placed = false;
+                int cycles = 1;
+                while (!placed)
+                {
+                    if (cycles < 20)
+                    {
+                        index = (index + index - 1) % (tableToEdit.Length - 1);
+                    }
+                    else
+                    {
+                        index = (index + 1) % (tableToEdit.Length - 1);
+                    }
+
+                    if (tableToEdit[index] == null)
+                    {
+                        tableToEdit[index] = value;
+                        placed = true;
+                    }
+                    cycles++;
+                }
+            }
         }
 
         private int GetHashIndex(string value)
@@ -101,154 +138,117 @@ namespace SeanHashTable
 
         private int GetCharHashValue(char character)
         {
-            int index;
             switch (character)
             {
                 case 'a':
-                    index = 1;
-                    break;
+                    return 1;
                 case 'b':
-                    index = 2;
-                    break;
+                    return 2;
                 case 'c':
-                    index = 3;
-                    break;
+                    return 3;
                 case 'd':
-                    index = 4;
-                    break;
+                    return 4;
                 case 'e':
-                    index = 5;
-                    break;
+                    return 5;
                 case 'f':
-                    index = 6;
-                    break;
+                    return 6;
                 case 'g':
-                    index = 7;
-                    break;
+                    return 7;
                 case 'h':
-                    index = 8;
-                    break;
+                    return 8;
                 case 'i':
-                    index = 9;
-                    break;
+                    return 9;
                 case 'j':
-                    index = 10;
-                    break;
+                    return 10;
                 case 'k':
-                    index = 11;
-                    break;
+                    return 11;
                 case 'l':
-                    index = 12;
-                    break;
+                    return 12;
                 case 'm':
-                    index = 13;
-                    break;
+                    return 13;
                 case 'n':
-                    index = 14;
-                    break;
+                    return 14;
                 case 'o':
-                    index = 15;
-                    break;
+                    return 15;
                 case 'p':
-                    index = 16;
-                    break;
+                    return 16;
                 case 'q':
-                    index = 17;
-                    break;
+                    return 17;
                 case 'r':
-                    index = 18;
-                    break;
+                    return 18;
                 case 's':
-                    index = 19;
-                    break;
+                    return 19;
                 case 't':
-                    index = 20;
-                    break;
+                    return 20;
                 case 'u':
-                    index = 21;
-                    break;
+                    return 21;
                 case 'v':
-                    index = 22;
-                    break;
+                    return 22;
                 case 'w':
-                    index = 23;
-                    break;
+                    return 23;
                 case 'x':
-                    index = 24;
-                    break;
+                    return 24;
                 case 'y':
-                    index = 25;
-                    break;
+                    return 25;
                 case 'z':
-                    index = 26;
-                    break;
+                    return 26;
                 case '1':
-                    index = 1;
-                    break;
+                    return 1;
                 case '2':
-                    index = 2;
-                    break;
+                    return 2;
                 case '3':
-                    index = 3;
-                    break;
+                    return 3;
                 case '4':
-                    index = 4;
-                    break;
+                    return 4;
                 case '5':
-                    index = 5;
-                    break;
+                    return 5;
                 case '6':
-                    index = 6;
-                    break;
+                    return 6;
                 case '7':
-                    index = 7;
-                    break;
+                    return 7;
                 case '8':
-                    index = 8;
-                    break;
+                    return 8;
                 case '9':
-                    index = 9;
-                    break;
+                    return 9;
                 case '0':
-                    index = 10;
-                    break;
+                    return 10;
                 default:
-                    index = 0;
-                    break;
+                    return 0;
             }
-
-            return index;
         }
 
-        private void PlaceInTable(string value, int index, string[] tableToEdit)
+        private int FindEmptyIndex(int index)
         {
-            if (tableToEdit[index] == null)
+            bool placeFound = false;
+            int cycles = 1;
+            string[] tableToSearch;
+            if (resizing)
             {
-                tableToEdit[index] = value;
+                tableToSearch = resizingTable;
             }
             else
             {
-                bool placed = false;
-                int cycles = 1;
-                while (!placed)
-                {
-                    if (cycles < 20)
-                    {
-                        index = (index + index - 1) % (tableToEdit.Length - 1);      
-                    }
-                    else
-                    {
-                        index = (index + 1) % (tableToEdit.Length - 1);
-                    }
-
-                    if (tableToEdit[index] == null)
-                    {
-                        tableToEdit[index] = value;
-                        placed = true;
-                    }
-                    cycles++;
-                }
+                tableToSearch = table;
             }
+
+            while (!placeFound)
+            {
+                if (cycles < 20)
+                {
+                    index = (index + index - 1) % (tableToSearch.Length - 1);
+                }
+                else
+                {
+                    index = (index + 1) % (tableToSearch.Length - 1);
+                }
+
+                if (tableToSearch[index] == null)
+                {
+                    placeFound = true;
+                }
+                cycles++;
+            }
+            return index;
         }
 
         /// <summary>
