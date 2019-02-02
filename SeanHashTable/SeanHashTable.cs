@@ -31,7 +31,9 @@ namespace SeanHashTable
                     resizingTable = new string[table.Length * 2];
                 }
 
-                for (int x = 0; x < 3; x++)
+                bool stop = false;
+                int x = 0;
+                while (!stop)
                 {
                     if (table[resizeIndex] != null)
                     {
@@ -45,7 +47,13 @@ namespace SeanHashTable
                         resizeIndex = 0;
                         table = null;
                         table = resizingTable;
-                        break;
+                        stop = true;
+                    }
+
+                    x++;
+                    if(x > 2)
+                    {
+                        stop = true;
                     }
                 }
 
@@ -268,6 +276,8 @@ namespace SeanHashTable
                     table[valueProbed.Value] = null;
                 }
             }
+
+            Count--;
         }
 
         /// <summary>
@@ -294,7 +304,7 @@ namespace SeanHashTable
                 {
                     if (table[index] == null && resizingTable[index] == null)
                     {
-                        break;
+                        return new KeyValuePair<bool, int>(false, index);
                     }
                     else if (resizingTable[index] == value)
                     {
@@ -324,7 +334,7 @@ namespace SeanHashTable
 
                     if (table[index] == null)
                     {
-                        break;
+                        return new KeyValuePair<bool, int>(false, index);
                     }
                     else if (table[index] == value)
                     {
@@ -344,8 +354,8 @@ namespace SeanHashTable
                 }
                 cycles++;
             }
-            KeyValuePair<bool, int> indexProbed = new KeyValuePair<bool, int>(found, index);
-            return indexProbed;
+            
+            return new KeyValuePair<bool, int>(found, index);
         }
     }
 }
