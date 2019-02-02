@@ -15,6 +15,10 @@ namespace SeanHashTable
         public int Count { get; private set; }
         public SeanHashTable() { Count = 0; }
 
+        /// <summary>
+        /// Adds a string to the hash table.
+        /// </summary>
+        /// <param name="newValue">The string to be added to the table.</param>
         public void Add(string newValue)
         {
             int index;
@@ -208,8 +212,6 @@ namespace SeanHashTable
             return index;
         }
 
-
-
         private void PlaceInTable(string value, int index, string[] table)
         {
             if (table[index] == null)
@@ -241,6 +243,10 @@ namespace SeanHashTable
             }
         }
 
+        /// <summary>
+        /// Delete a string from the hash table if it exists.
+        /// </summary>
+        /// <param name="value">The value to be deleted from the table.</param>
         public void Delete(string value)
         {
             KeyValuePair<bool, int> valueProbed = ProbeForValue(value);
@@ -264,6 +270,11 @@ namespace SeanHashTable
             }
         }
 
+        /// <summary>
+        /// Searches for a string in the hash table. Returns true if the string exists in the table.
+        /// </summary>
+        /// <param name="value">The value to search for.</param>
+        /// <returns></returns>
         public bool Search(string value)
         {
             KeyValuePair<bool, int> valueProbed = ProbeForValue(value);
